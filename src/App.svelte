@@ -16,15 +16,18 @@
       let src = cv.imread(img);
 
       // Check if the image is larger than 600x600
-      if (src.cols > 800 || src.rows > 800) {
+      if (src.cols > 600 || src.rows > 600) {
         // Resize the image
-        const hratio = 800 / src.rows;
-        const vratio = 800 / src.cols;
+        const hratio = 600 / src.rows;
+        const vratio = 600 / src.cols;
         const ratio = Math.min(hratio, vratio);
         cv.resize(
           src,
           src,
-          new cv.Size(Math.round(src.cols * ratio), Math.round(src.rows * ratio)),
+          new cv.Size(
+            Math.round(src.cols * ratio), 
+            Math.round(src.rows * ratio)
+          ),
         )
       }
       
@@ -37,7 +40,8 @@
           `image type: ${src.type()}\n`,
       )
 
-      cv.imshow("outputCanvas", src);
+      cv.imshow("canvas", src);
+      cv.imshow("processedCanvas", src);
       src.delete();
     };
   };
@@ -46,8 +50,9 @@
 <main class="app">
   {#if ready}
     <h1>OpenCV 4.7</h1>
-    <div class="canvasContainer">
-      <canvas id="outputCanvas" />
+    <div class="inputOutputContainer">
+      <canvas id="canvas" />
+      <canvas id="processedCanvas" />
     </div>
     <div id="fileInputField" class="field">
       <p class="description">Select an image file to load into OpenCV.js</p>
@@ -66,8 +71,11 @@
     justify-content: center;
     height: 100vh;
   }
-  .canvasContainer {
-    flex: 1;
+  .inputOutputContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
   }
   .field {
     margin: 1rem 0;
